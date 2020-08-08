@@ -3,8 +3,8 @@ package com.sign.edu_service.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sign.commonutils.R;
-import com.sign.edu_service.entity.EduTeacher;
-import com.sign.edu_service.service.EduTeacherService;
+import com.sign.edu_service.entity.Teacher;
+import com.sign.edu_service.service.TeacherService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,15 +24,15 @@ import java.util.List;
 @Api(description="讲师管理")
 @RestController
 @RequestMapping("/admin/edu/teacher")
-public class EduTeacherController {
+public class TeacherController {
 
     @Autowired
-    private EduTeacherService teacherService;
+    private TeacherService teacherService;
 
     @ApiOperation(value = "所有讲师列表")
     @GetMapping
     public R list(){
-        List<EduTeacher> list = teacherService.list(null);
+        List<Teacher> list = teacherService.list(null);
         return R.ok().data("items", list);
     }
 
@@ -41,8 +41,12 @@ public class EduTeacherController {
     public R removeById(
             @ApiParam(name = "id", value = "讲师ID", required = true)
             @PathVariable String id){
-        teacherService.removeById(id);
-        return R.ok();
+        boolean flag = teacherService.removeById(id);
+        if (flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
     }
 
     @ApiOperation(value = "分页讲师列表")
@@ -54,10 +58,10 @@ public class EduTeacherController {
             @ApiParam(name = "limit", value = "每页记录数", required = true)
             @PathVariable Long limit){
 
-        Page<EduTeacher> pageParam = new Page<>(page, limit);
+        Page<Teacher> pageParam = new Page<>(page, limit);
 
         teacherService.page(pageParam, null);
-        List<EduTeacher> records = pageParam.getRecords();
+        List<Teacher> records = pageParam.getRecords();
         long total = pageParam.getTotal();
 
         return  R.ok().data("total", total).data("rows", records);
