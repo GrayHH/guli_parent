@@ -1,7 +1,7 @@
 package com.sign.edu_service.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.sign.edu_service.entity.Teacher;
+import com.sign.edu_service.entity.EduTeacher;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.sign.edu_service.entity.Teacher;
  * @author Sign
  * @since 2020-08-03
  */
-public interface TeacherMapper extends BaseMapper<Teacher> {
+public interface EduTeacherMapper extends BaseMapper<EduTeacher> {
 
 }

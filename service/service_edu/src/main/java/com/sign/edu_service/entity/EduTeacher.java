@@ -24,7 +24,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="EduTeacher对象", description="讲师")
-public class Teacher implements Serializable {
+public class EduTeacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
