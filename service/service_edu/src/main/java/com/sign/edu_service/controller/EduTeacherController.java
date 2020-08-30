@@ -23,18 +23,18 @@ import java.util.List;
  * @author Sign
  * @since 2020-08-03
  */
-@Api(description="讲师管理")
+@Api(description = "讲师管理")
 @RestController
 @RequestMapping("/eduservice/teacher")
 public class EduTeacherController {
 
     @Autowired
-    private EduTeacherService eduTeacherService;
+    private EduTeacherService TeacherService;
 
     @ApiOperation(value = "所有讲师列表")
-    @GetMapping("findall")
-    public R list(){
-        List<EduTeacher> list = eduTeacherService.list(null);
+    @GetMapping("findAll")
+    public R list() {
+        List<EduTeacher> list = TeacherService.list(null);
         return R.ok().data("items", list);
     }
 
@@ -42,35 +42,13 @@ public class EduTeacherController {
     @DeleteMapping("{id}")
     public R removeById(
             @ApiParam(name = "id", value = "讲师ID", required = true)
-            @PathVariable String id){
-        boolean flag = eduTeacherService.removeById(id);
-        if (flag){
+            @PathVariable String id) {
+        boolean flag = TeacherService.removeById(id);
+        if (flag) {
             return R.ok();
-        }else {
+        } else {
             return R.error();
         }
-    }
-
-    @ApiOperation(value = "分页讲师列表")
-    @GetMapping("{page}/{limit}")
-    public R pageList(
-            @ApiParam(name = "page", value = "当前页码", required = true)
-            @PathVariable Long page,
-
-            @ApiParam(name = "limit", value = "每页记录数", required = true)
-            @PathVariable Long limit){
-
-        Page<EduTeacher> pageParam = new Page<>(page, limit);
-
-        eduTeacherService.page(pageParam, null);
-        List<EduTeacher> records = pageParam.getRecords();
-        long total = pageParam.getTotal();
-
-        HashMap<Object, Object> dataMap = new HashMap<>();
-        dataMap.put("total",total);
-        dataMap.put("rows",records);
-
-        return  R.ok().data("data", dataMap);
     }
 
     @ApiOperation(value = "分页讲师列表")
@@ -83,19 +61,53 @@ public class EduTeacherController {
             @PathVariable Long limit,
 
             @ApiParam(name = "teacherQuery", value = "查询对象")
-                    TeacherQuery teacherQuery){
+                    TeacherQuery teacherQuery) {
 
         Page<EduTeacher> pageParam = new Page<>(page, limit);
 
-        eduTeacherService.pageQuery(pageParam, teacherQuery);
+        TeacherService.pageQuery(pageParam, teacherQuery);
         List<EduTeacher> records = pageParam.getRecords();
         long total = pageParam.getTotal();
 
         HashMap<Object, Object> dataMap = new HashMap<>();
-        dataMap.put("total",total);
-        dataMap.put("rows",records);
+        dataMap.put("total", total);
+        dataMap.put("rows", records);
 
-        return  R.ok().data("data", dataMap);
+        return R.ok().data("data", dataMap);
     }
+
+    //添加讲师接口
+    @ApiOperation(value = "添加讲师")
+    @PostMapping("addTeacher")
+    public R addTeacher(@RequestBody EduTeacher eduTeacher) {
+        boolean save = TeacherService.save(eduTeacher);
+        if (save) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
+    }
+
+    //根据讲师ID查询
+    @ApiOperation(value = "根据讲师ID查询")
+    @GetMapping("getTeacher/{id}")
+    public R getTeacherById(@PathVariable String id) {
+        EduTeacher eduTeacher = TeacherService.getById(id);
+        return R.ok().data("teacher", eduTeacher);
+    }
+
+    //讲师修改功能
+    @ApiOperation(value = "讲师修改功能")
+    @PostMapping("updateTeacher")
+    public R updateTeacher(@RequestBody EduTeacher eduTeacher) {
+        boolean flag = TeacherService.updateById(eduTeacher);
+        if (flag) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
+    }
+
+
 }
 
