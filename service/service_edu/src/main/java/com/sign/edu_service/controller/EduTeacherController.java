@@ -68,7 +68,6 @@ public class EduTeacherController {
         TeacherService.pageQuery(pageParam, teacherQuery);
         List<EduTeacher> records = pageParam.getRecords();
         long total = pageParam.getTotal();
-
         HashMap<Object, Object> dataMap = new HashMap<>();
         dataMap.put("total", total);
         dataMap.put("rows", records);
